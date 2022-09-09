@@ -14,10 +14,10 @@
      padding-left: 10px;
      padding-right: 10px;
 }
- #countdown {
-     font-size: 10vw;
-     font-family: 'DIN Next';
-     color: white;
+#countdown {
+    font-size: 112px;
+    font-family: 'DIN Next';
+    color: #fff;
 }
  #moreWorkBtn, #moreBreakBtn {
      display: none 
