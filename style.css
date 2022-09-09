@@ -1,0 +1,42 @@
+@font-face {
+     font-family: 'DIN Next';
+     src: url('DINNextLTPro-Medium.woff2') format('woff2');
+     font-weight: 500;
+     font-style: normal;
+     font-display: auto;
+}
+ div,h1,button {
+     text-align: center;
+     font-family: "Lexend Deca";
+}
+ button {
+     border-radius: 10px;
+     padding-left: 10px;
+     padding-right: 10px;
+}
+ #countdown {
+     font-size: 10vw;
+     font-family: 'DIN Next';
+     color: white;
+}
+ #moreWorkBtn, #moreBreakBtn {
+     display: none 
+}
+ #work-div {
+     display: none;
+}
+ .box {
+     margin: auto;
+     width: fit-content;
+     padding: 10px;
+     border-radius: 19px;
+     margin-top: 18px;
+     max-width: 876px;
+     background-color: #efefef;
+}
+ #extra-break {
+     color: #f4ff98;
+}
+ #extra-work {
+     color: #d5ffc7;
+}
