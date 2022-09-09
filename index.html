@@ -1,0 +1,248 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Pomodoro But Better</title>
+  <meta name="description" content="Pomodoro But Better">
+<link href='https://fonts.googleapis.com/css?family=Lexend Deca' rel='stylesheet'>  
+<style>
+@font-face {
+	font-family: 'DIN Next';
+	src: url('DINNextLTPro-Medium.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+}
+div,h1,button {
+text-align: center;
+font-family: "Lexend Deca";
+}
+button {
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#countdown {
+    font-size: 10vw;
+	font-family: 'DIN Next';
+	color: white;
+}
+
+#moreWorkBtn, #moreBreakBtn {
+	display: none
+}
+
+#work-div {
+display: none;
+}
+.box {
+    margin: auto;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 19px;
+    margin-top: 18px;
+    max-width: 876px;
+    background-color: #efefef;
+}
+#extra-break {
+    color: #f4ff98;
+}
+#extra-work {
+    color: #d5ffc7;
+}
+</style>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="strftime.js"></script>
+</head>
+
+<body>
+
+<div class="box">
+<h1>Pomodoro But Better™</h1>
+<div id="countdown"></div>
+<div id="extra-work"></div>
+<div id="extra-break"></div>
+<script>
+	alarm = new Audio("alarm.m4a")
+	alarm.loop = true;
+	var lastDone = "long";
+	var count = 0;
+	var extraWork = 0;
+	var extraBreak = 0;
+	var workTime = 25
+	var shortTime = 5
+	var longTime = 15
+	var offsetBreak = true
+	function showExtends() {
+		if  (lastDone == "work") {
+			document.querySelector("#moreWorkBtn").style.display = 'initial'
+		} else {
+			document.querySelector("#moreBreakBtn").style.display = 'initial'
+		}
+	}
+	
+	function hideExtends() {
+			document.querySelector("#moreWorkBtn").style.display = 'none'
+			document.querySelector("#moreBreakBtn").style.display = 'none'
+	}	
+	
+	function doro(minutes,text,bgColor,boxColor) {
+	hideExtends()
+	document.body.bgColor = bgColor
+	let boxes = document.querySelectorAll(".box")
+	for (let i = 0; i < boxes.length; i++) {
+		boxes[i].style.backgroundColor = boxColor
+	}	
+	console.log(`${minutes} minute countdown started`)
+		document.querySelector("#goBtn").disabled = true
+		document.querySelector("#goBtn").textContent = "YOU CAN'T STOP THE PASSAGE OF TIME"	
+	alarm.pause()
+	alarm.currentTime = 0;
+	var elem = document.createElement("h1")	
+	let timeDone = document.createElement("p")	
+	elem.style.marginBottom = "0"
+	timeDone.style.marginTop = "0"
+	elem.appendChild(timeDone)
+	timeDone.textContent = strftime("%I:%M %p",new Date())	
+	document.querySelector("#work-div").prepend(timeDone)
+	document.querySelector("#work-div").prepend(elem)
+	
+
+	elem.textContent = text
+	
+	
+	var countDownDate = new Date(new Date().getTime() + minutes*60000).getTime();
+	
+	$("#countdown")
+			  .countdown(countDownDate)
+			  .on('update.countdown', function(event) {
+				$(this).text(
+				  event.strftime('%M:%S')
+				);
+			  })
+			  .on('finish.countdown', function(event) {
+				$(this).text(
+				  event.strftime('00:00')
+				);
+				alarm.play()
+				showExtends()
+				document.querySelector("#goBtn").disabled = false
+				document.querySelector("#goBtn").textContent = "GO"
+			  });	
+	
+	}
+	
+	function work() {
+	var minutes = workTime + extraWork	
+	let bgColor = "#b50000"
+	let boxColor = "#d50000"
+	let msg = (extraWork) ? `WORK +${extraWork}min`: "WORK"
+	doro(minutes,msg,bgColor,boxColor)
+	extraWork = 0
+	document.querySelector("#extra-work").textContent = ""
+	}
+	
+	function shortBreak() {
+	var minutes = shortTime + extraBreak	
+	let bgColor = "green"
+	let boxColor = "#00a91a"
+	let msg = (extraBreak) ? `SHORT BREAK +${extraBreak}min`: "SHORT BREAK"
+	doro(minutes,msg,bgColor,boxColor)
+	extraBreak = 0
+	document.querySelector("#extra-break").textContent = ""
+	}
+	
+	function longBreak() {
+	var minutes = longTime + extraBreak
+	let bgColor = "#00ad71"
+	let boxColor = "#00d38a"	
+	let msg = (extraBreak) ? `LONG BREAK +${extraBreak}min`: "LONG BREAK"
+	doro(minutes,msg,bgColor,boxColor)
+	extraBreak = 0
+	document.querySelector("#extra-break").textContent = ""
+	}
+	
+	function go() {
+		offsetBreak = true
+		document.querySelector("#work-div").style.display = "block"
+	  if (lastDone == "work") {
+		if (count == 4) {
+		  longBreak()
+		  lastDone = "long"
+		  count = 0
+		  }
+		else {
+		  shortBreak()
+		  lastDone = "short"
+		  }
+		}
+	  else {
+		work()
+		lastDone = "work"
+		count++
+		}
+	  }	
+	
+	function moreWork() {
+	
+	if (count == 4) {		
+		extraBreak += longTime;
+		document.querySelector("#extra-break").textContent = `+${extraBreak} minutes for next break`
+		console.log(`extraBreak ${longTime} added`)
+		count = 1		
+	} else {
+		extraBreak += shortTime;
+		document.querySelector("#extra-break").textContent = `+${extraBreak} minutes for next break`
+		console.log(`extraBreak ${shortTime} added`)
+		count++
+	}
+	work()
+	}
+	
+	function moreBreak() {
+		if (offsetBreak) {count++}
+		offsetBreak = false
+		console.log(`count: ${count}`)
+		extraWork += workTime;
+		document.querySelector("#extra-work").textContent = `+${extraWork} minutes for next work`
+		console.log(`extraWork ${workTime} added`)
+		if (count == 4) {
+		longBreak()
+		count = 1
+		} else{
+		
+		shortBreak()
+		count++
+		}
+	}
+</script>
+<button id="goBtn" onclick="go()">GO</button>
+<br>
+<button id="moreWorkBtn" onclick="moreWork()">EXTEND WORK!</button>
+<button id="moreBreakBtn" onclick="moreBreak()">EXTEND BREAK!</button>
+</div>
+
+
+<div id="work-div" class="box">
+</div>
+<div class="box">
+<h1>What is this?</h1>
+<p>It's just like every other pomodoro timer website but with one spectacular improvement: time extensions. If you ever feel like you want to keep working or keep taking your break when the timer hits, you can choose to extend it. Simple as that.</p>
+<h1>What is Pomodoro?</h1>
+<p>The Pomodoro Technique is a time management method developed by Francesco Cirillo in the late 1980s.
+<p>Basically:<br>
+1. Work for 25 minutes<br>
+2. Take a break for 5 minutes<br>
+3. Work for 25 minutes<br>
+4. Take a break for 5 minutes<br>
+5. Work for 25 minutes<br>
+6. Take a break for 5 minutes<br>
+7. Work for 25 minutes<br>
+8. Take a break for 15 minutes<br>
+9. Repeat</p>
+
+</div>
+</body>
+</html>
