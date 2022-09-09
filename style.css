@@ -40,3 +40,9 @@
  #extra-work {
      color: #d5ffc7;
 }
+.item {
+	display: list-item;
+	list-style: decimal;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
