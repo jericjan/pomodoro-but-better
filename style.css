@@ -46,3 +46,19 @@
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+.flashing {
+animation: bgPulsate 0.5s ease-in-out infinite;	
+}
+
+.txt-flashing {
+animation: txtPulsate 0.5s ease-in-out infinite;	
+}
+
+@keyframes bgPulsate {
+  50% {background-color: black;}
+} 
+
+@keyframes txtPulsate {
+  50% {color: white;}
+} 

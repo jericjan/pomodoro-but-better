@@ -23,11 +23,17 @@ function hideExtends () {
 }
 
 function doro (minutes, text, bgColor, boxColor) {
+  document.body.classList.remove("flashing")
   hideExtends()
   document.body.bgColor = bgColor
+  var texts = document.querySelectorAll('h1,p')
+  for (let i = 0; i < texts.length; i++) {
+	texts[i].classList.remove("txt-flashing")
+  }  
   const boxes = document.querySelectorAll('.box')
   for (let i = 0; i < boxes.length; i++) {
     boxes[i].style.backgroundColor = boxColor
+	boxes[i].classList.remove("flashing")
   }
   console.log(`${minutes} minute countdown started`)
   document.querySelector('#goBtn').disabled = true
@@ -62,6 +68,14 @@ function doro (minutes, text, bgColor, boxColor) {
       showExtends()
       document.querySelector('#goBtn').disabled = false
       document.querySelector('#goBtn').textContent = 'GO'
+	  document.body.classList.add("flashing")
+	  for (let i = 0; i < boxes.length; i++) {
+		boxes[i].classList.add("flashing")
+	  }
+	  var texts = document.querySelectorAll('h1,p')
+	  for (let i = 0; i < texts.length; i++) {
+		texts[i].classList.add("txt-flashing")
+	  } 	  
     })
 }
 
